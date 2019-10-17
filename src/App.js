@@ -13,6 +13,7 @@ import NoteContext from './NoteContext';
 import AddNote from './AddNote/AddNote';
 import AddFolder from './AddFolder/AddFolder';
 import DeleteFolder from './Main/DeleteFolder';
+import ErrorBoundary from './ErrorBoundary';
 
 export default class App extends Component {
   state = {
@@ -99,57 +100,61 @@ export default class App extends Component {
 
   render() {
     return (
-      <NoteContext.Provider
-        value={{
-          folders: this.state.folders,
-          notes: this.state.notes,
-          deleteNote: this.deleteNote,
-          handleAddFolder: this.handleAddFolder,
-          handleAddNote: this.handleAddNote,
-          handleDeleteFolder: this.deleteFolder,
-        }}
-      >
-        <header className='header'>
-          <Link to='/'>
-            <h1>Noteful</h1>
-          </Link>
-        </header>
-        <main>
-          <Switch>
-            <Route
-              path='/note'
-              render={props => (
-                <NoteSidebar goBackEvent={e => props.history.goBack()} />
-              )}
-            />
+      <ErrorBoundary>
+        <NoteContext.Provider
+          value={{
+            folders: this.state.folders,
+            notes: this.state.notes,
+            deleteNote: this.deleteNote,
+            handleAddFolder: this.handleAddFolder,
+            handleAddNote: this.handleAddNote,
+            handleDeleteFolder: this.deleteFolder,
+          }}
+        >
+          <header className='header'>
+            <Link to='/'>
+              <h1>Noteful</h1>
+            </Link>
+          </header>
+          <main>
+            <Switch>
+              <Route
+                path='/note'
+                render={props => (
+                  <NoteSidebar goBackEvent={e => props.history.goBack()} />
+                )}
+              />
 
-            <Route path='/' component={() => <MainSidebar />} />
-          </Switch>
+              <Route path='/' component={() => <MainSidebar />} />
+            </Switch>
 
-          <section className='mainSection'>
-            <Route exact path='/' component={() => <NoteList />} />
+            <section className='mainSection'>
+              <Route exact path='/' component={() => <NoteList />} />
 
-            <Route
-              exact
-              path='/folder/:folderId'
-              render={props => (
-                <>
-                  <NoteList folderId={props.match.params.folderId} />
-                  <DeleteFolder />
-                </>
-              )}
-            />
+              <Route
+                exact
+                path='/folder/:folderId'
+                render={props => (
+                  <>
+                    <NoteList folderId={props.match.params.folderId} />
+                    <DeleteFolder />
+                  </>
+                )}
+              />
 
-            <Route
-              exact
-              path='/note/:noteId'
-              render={props => <NoteView noteId={props.match.params.noteId} />}
-            />
-            <Route exact path='/add-folder' render={() => <AddFolder />} />
-            <Route exact path='/add-note' render={() => <AddNote />} />
-          </section>
-        </main>
-      </NoteContext.Provider>
+              <Route
+                exact
+                path='/note/:noteId'
+                render={props => (
+                  <NoteView noteId={props.match.params.noteId} />
+                )}
+              />
+              <Route exact path='/add-folder' render={() => <AddFolder />} />
+              <Route exact path='/add-note' render={() => <AddNote />} />
+            </section>
+          </main>
+        </NoteContext.Provider>
+      </ErrorBoundary>
     );
   }
 }

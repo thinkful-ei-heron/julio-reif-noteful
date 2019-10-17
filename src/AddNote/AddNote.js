@@ -15,6 +15,7 @@ export default class AddNote extends Component {
     this.validateNoteName = this.validateNoteName.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
+
   static contextType = NoteContext;
 
   handleInputChange(e) {
@@ -27,28 +28,24 @@ export default class AddNote extends Component {
   }
 
   validateNoteName() {
-    if (!this.state.name && this.state.touched) {
-      return false;
+    if (!this.state.name && this.state.name.touched) {
+      return 'Name cannot be empty';
     }
   }
   validateNoteContent() {
-    if (!this.state.content && this.state.touched) {
-      return false;
+    if (!this.state.content && this.state.content.touched) {
+      return 'Content cannot be empty';
     }
   }
 
   handleClick = () => {
     let folderId = document.getElementById('folder-name-select').value;
-    console.log(folderId);
     if (!this.canBeSubmitted()) {
-      return null;
     } else if (folderId !== 'Pick a Folder') {
       let name = document.getElementById('note-name-input').value;
       let content = document.getElementById('note-content-input').value;
       let folderId = document.getElementById('folder-name-select').value;
       let date = Date.now();
-      this.validateNoteContent();
-      this.validateNoteName();
       this.context.handleAddNote(name, content, folderId, date);
     }
   };
@@ -102,10 +99,14 @@ export default class AddNote extends Component {
               );
             })}
           </select>
+          <p className='error'> {this.validateNoteName()}</p>
+          <p className='error'> {this.validateNoteContent()}</p>
         </form>
 
         <button
           onClick={() => {
+            this.validateNoteContent();
+            this.validateNoteName();
             this.handleClick();
           }}
         >

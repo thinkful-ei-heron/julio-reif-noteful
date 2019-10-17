@@ -32,7 +32,6 @@ export default class AddFolder extends Component {
       <>
         <form>
           <label htmlFor='folderName'>Enter Folder</label>
-          <p className='error'> {this.validateName()}</p>
           <input
             type='text'
             id='folder-name'
@@ -49,6 +48,7 @@ export default class AddFolder extends Component {
             }}
             value='Submit Folder'
           />
+          <p className='error'> {this.validateName()}</p>
         </form>
       </>
     );
