@@ -8,11 +8,11 @@ export default class MainSidebar extends Component {
 
   folderButtons = folders => {
     return (
-      <ul className="sideNav">
+      <ul className='sideNav'>
         {folders.map(folder => (
-          <li>
+          <li key={folder.id}>
             <Link to={folder.id}>
-              <button className="folderButton">{folder.name}</button>
+              <button className='folderButton'>{folder.name}</button>
             </Link>
           </li>
         ))}
@@ -23,9 +23,14 @@ export default class MainSidebar extends Component {
   render() {
     const { folders } = this.context;
     return (
-      <nav className="sideBar">
+      <nav className='sideBar'>
         {this.folderButtons(folders)}
-        <button className="addBtn">Add Folder</button>
+        <button className='addBtn' onClick={this.addFolder}>
+          <a href='/add-folder'>Add Folder</a>
+        </button>
+        <button className='addBtn'>
+          <a href='/add-note'>Add Note</a>
+        </button>
       </nav>
     );
   }

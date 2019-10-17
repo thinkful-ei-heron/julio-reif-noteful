@@ -10,6 +10,8 @@ import NoteSidebar from './Nav/NoteSidebar';
 import NoteView from './Note/NoteView';
 import NoteList from './Main/NoteList';
 import NoteContext from './NoteContext';
+import AddNote from './AddNote/AddNote';
+import AddFolder from './AddFolder/AddFolder';
 
 export default class App extends Component {
   state = {
@@ -17,17 +19,47 @@ export default class App extends Component {
     notes: [],
   };
 
-  componentDidMount() {
+  updateFolders = () => {
     fetch('http://localhost:9090/folders')
       .then(res => res.json())
       .then(data => this.setState({ folders: data }));
-
+  };
+  updatesNotes = () => {
     fetch('http://localhost:9090/notes')
       .then(res => res.json())
       .then(data => this.setState({ notes: data }));
+  };
+
+  componentDidMount() {
+    this.updateFolders();
+    this.updatesNotes();
   }
 
-  deleteNote = noteId => {
+  handleAddFolder = (e, name) => {
+    e.preventDefault();
+    fetch(`http://localhost:9090/folders`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name: name }),
+    }).then(this.updateFolders);
+  };
+
+  handleAddNote = (e, name, content, folderId) => {
+    e.preventDefault();
+    console.log(name, content, folderId);
+    fetch(`http://localhost:9090/notes`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        content: content,
+        folderId: folderId,
+      }),
+    }).then(this.updatesNotes);
+  };
+
+  deleteNote = (noteId, e) => {
+    e.preventDefault();
     fetch(`http://localhost:9090/notes/${noteId}`, {
       method: 'DELETE',
       headers: { 'content-type': 'application/json' },
@@ -48,6 +80,8 @@ export default class App extends Component {
             folders: this.state.folders,
             notes: this.state.notes,
             deleteNote: this.deleteNote,
+            handleAddFolder: this.handleAddFolder,
+            handleAddNote: this.handleAddNote,
           }}
         >
           <header className='header'>
@@ -60,7 +94,9 @@ export default class App extends Component {
               <Route
                 path='/note'
                 render={props => (
-                  <NoteSidebar goBackEvent={e => props.history.goBack()} />
+                  <>
+                    <NoteSidebar goBackEvent={e => props.history.goBack()} />
+                  </>
                 )}
               />
 
@@ -85,6 +121,8 @@ export default class App extends Component {
                   <NoteView noteId={props.match.params.noteId} />
                 )}
               />
+              <Route exact path='/add-folder' render={() => <AddFolder />} />
+              <Route exact path='/add-note' render={() => <AddNote />} />
             </section>
           </main>
         </NoteContext.Provider>
