@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+
 import './reset.css';
 import './App.css';
+
 import MainSidebar from './Nav/MainSidebar';
 import NoteSidebar from './Nav/NoteSidebar';
 import NoteView from './Note/NoteView';
@@ -12,7 +14,7 @@ import NoteContext from './NoteContext';
 export default class App extends Component {
   state = {
     folders: [],
-    notes: []
+    notes: [],
   };
 
   componentDidMount() {
@@ -28,9 +30,13 @@ export default class App extends Component {
   deleteNote = noteId => {
     fetch(`http://localhost:9090/notes/${noteId}`, {
       method: 'DELETE',
-      headers: { 'content-type': 'application/json' }
+      headers: { 'content-type': 'application/json' },
     })
-      .then(this.setState({ notes: this.state.notes.filter(note => note.id !== noteId) }))
+      .then(
+        this.setState({
+          notes: this.state.notes.filter(note => note.id !== noteId),
+        })
+      )
       .then(console.log(this.state.notes));
   };
 
@@ -41,37 +47,43 @@ export default class App extends Component {
           value={{
             folders: this.state.folders,
             notes: this.state.notes,
-            deleteNote: this.deleteNote
+            deleteNote: this.deleteNote,
           }}
         >
-          <header className="header">
-            <Link to="/">
+          <header className='header'>
+            <Link to='/'>
               <h1>Noteful</h1>
             </Link>
           </header>
           <main>
             <Switch>
               <Route
-                path="/note"
-                render={props => <NoteSidebar goBackEvent={e => props.history.goBack()} />}
+                path='/note'
+                render={props => (
+                  <NoteSidebar goBackEvent={e => props.history.goBack()} />
+                )}
               />
 
-              <Route path="/" component={() => <MainSidebar />} />
+              <Route path='/' component={() => <MainSidebar />} />
             </Switch>
 
-            <section className="mainSection">
-              <Route exact path="/" component={() => <NoteList />} />
+            <section className='mainSection'>
+              <Route exact path='/' component={() => <NoteList />} />
 
               <Route
                 exact
-                path="/:folderId"
-                render={props => <NoteList folderId={props.match.params.folderId} />}
+                path='/:folderId'
+                render={props => (
+                  <NoteList folderId={props.match.params.folderId} />
+                )}
               />
 
               <Route
                 exact
-                path="/note/:noteId"
-                render={props => <NoteView noteId={props.match.params.noteId} />}
+                path='/note/:noteId'
+                render={props => (
+                  <NoteView noteId={props.match.params.noteId} />
+                )}
               />
             </section>
           </main>
