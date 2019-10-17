@@ -17,7 +17,7 @@ export default class Note extends Component {
               <div className='noteInfo'>
                 <span>{this.props.date}</span>
                 <Link to='/'>
-                  <button onClick={e => deleteNote(this.props.id, e)}>
+                  <button onClick={e => deleteNote(this.props.id)}>
                     Delete Note
                   </button>
                 </Link>

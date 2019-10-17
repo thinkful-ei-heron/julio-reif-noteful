@@ -8,9 +8,10 @@ export default class NoteList extends Component {
 
   render() {
     let notes = this.context.notes;
-    if (this.props.folderId)
-      notes = notes.filter(note => note.folderId === this.props.folderId);
 
+    if (this.props.folderId) {
+      notes = notes.filter(note => note.folderId === this.props.folderId);
+    }
     return (
       <>
         <ul className='noteContainer'>

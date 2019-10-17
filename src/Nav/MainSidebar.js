@@ -8,9 +8,8 @@ export default class MainSidebar extends Component {
 
   folderButtons = folders => {
     var currentRouteName = window.location.href
-      .split('http://localhost:3000/')
+      .split('http://localhost:3000/folder/')
       .pop();
-    console.log(currentRouteName);
     return (
       <ul className='sideNav'>
         {folders.map(folder => (
@@ -20,7 +19,7 @@ export default class MainSidebar extends Component {
               folder.id === currentRouteName ? 'foreground' : 'backgound'
             }
           >
-            <Link to={folder.id}>
+            <Link to={'/folder/' + folder.id}>
               <button className='folderButton'>{folder.name}</button>
             </Link>
           </li>
