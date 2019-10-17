@@ -17,6 +17,9 @@ button {
 .sideNav li {
   border-bottom: 2px solid black;
 }
+.foreground {
+  background-color: lightblue;
+}
 
 .sideNav li:first-child {
   border-top: 2px solid black;

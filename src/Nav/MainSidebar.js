@@ -7,10 +7,19 @@ export default class MainSidebar extends Component {
   static contextType = NoteContext;
 
   folderButtons = folders => {
+    var currentRouteName = window.location.href
+      .split('http://localhost:3000/')
+      .pop();
+    console.log(currentRouteName);
     return (
       <ul className='sideNav'>
         {folders.map(folder => (
-          <li key={folder.id}>
+          <li
+            key={folder.id}
+            className={
+              folder.id === currentRouteName ? 'foreground' : 'backgound'
+            }
+          >
             <Link to={folder.id}>
               <button className='folderButton'>{folder.name}</button>
             </Link>
